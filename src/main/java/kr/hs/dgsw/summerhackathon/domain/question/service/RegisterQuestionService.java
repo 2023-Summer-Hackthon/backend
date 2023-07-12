@@ -4,6 +4,7 @@ import kr.hs.dgsw.summerhackathon.domain.question.domain.Question;
 import kr.hs.dgsw.summerhackathon.domain.question.domain.repository.QuestionRepository;
 import kr.hs.dgsw.summerhackathon.domain.question.presentation.dto.request.CreateQuestionRequest;
 import kr.hs.dgsw.summerhackathon.domain.user.domain.User;
+import kr.hs.dgsw.summerhackathon.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,21 +15,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterQuestionService {
 
     private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
 
 
 
-    @Transactional
+    @Transactional()
     public void execute(
             CreateQuestionRequest request,
-            User user
+            Long userId
     ) {
-        user.addQuestion(questionRepository.save(
-                Question.builder()
-                        .title(request.getTitle())
-                        .content(request.getContent())
-                        .reward(request.getReward())
-                        .category(request.getCategory())
-                        .build())
-        );
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("없다"));
+
+
+        Question question = Question.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .reward(request.getReward())
+                .category(request.getCategory())
+                .build();
+
+        user.addQuestion(question);
+        questionRepository.save(question);
     }
 }

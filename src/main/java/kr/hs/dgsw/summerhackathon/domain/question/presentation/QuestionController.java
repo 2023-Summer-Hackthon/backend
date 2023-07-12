@@ -28,9 +28,9 @@ public class QuestionController {
     @AuthGuard
     public void registerQuestion(
             @RequestBody CreateQuestionRequest request,
-            @RequestAttribute User user
+            @RequestAttribute Long userId
     ) {
-        registerQuestionService.execute(request, user);
+        registerQuestionService.execute(request, userId);
     }
 
     @GetMapping("/list/{page}")

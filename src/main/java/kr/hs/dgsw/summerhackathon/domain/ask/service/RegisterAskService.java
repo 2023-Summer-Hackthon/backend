@@ -17,8 +17,7 @@ public class RegisterAskService {
 
     @Transactional
     public void execute(
-            CreateAskRequest request,
-            User user
+            CreateAskRequest request
     ) {
         Question question = questionRepository.findById(request.getQuestionId())
                 .orElseThrow(() -> new RuntimeException("질문이 없노"));
@@ -28,7 +27,7 @@ public class RegisterAskService {
                 .build();
 
         question.addAsk(ask);
-        user.addAsk(ask);
+        question.getUser().addQuestion(question);
     }
 
 }
