@@ -1,4 +1,4 @@
-package kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.response;
+package kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

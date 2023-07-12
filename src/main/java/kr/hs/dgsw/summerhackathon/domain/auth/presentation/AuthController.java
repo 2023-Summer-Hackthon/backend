@@ -1,10 +1,10 @@
-package kr.hs.dgsw.summerhackathon.domain.user.presentation;
+package kr.hs.dgsw.summerhackathon.domain.auth.presentation;
 
-import kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.request.CreateUserRequest;
-import kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.request.LoginUserRequest;
-import kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.response.TokenDto;
-import kr.hs.dgsw.summerhackathon.domain.user.service.CommandUserService;
-import kr.hs.dgsw.summerhackathon.domain.user.service.LoginUserService;
+import kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.request.CreateUserRequest;
+import kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.request.LoginUserRequest;
+import kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.response.TokenDto;
+import kr.hs.dgsw.summerhackathon.domain.auth.service.CommandUserService;
+import kr.hs.dgsw.summerhackathon.domain.auth.service.LoginUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserController {
+public class AuthController {
 
     private final CommandUserService commandUserService;
 
@@ -33,4 +33,6 @@ public class UserController {
     ) {
         return loginUserService.execute(request);
     }
+
+
 }

@@ -1,7 +1,7 @@
-package kr.hs.dgsw.summerhackathon.domain.user.service;
+package kr.hs.dgsw.summerhackathon.domain.auth.service;
 
-import kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.response.TokenDto;
-import kr.hs.dgsw.summerhackathon.domain.user.presentation.dto.request.LoginUserRequest;
+import kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.response.TokenDto;
+import kr.hs.dgsw.summerhackathon.domain.auth.presentation.dto.request.LoginUserRequest;
 import kr.hs.dgsw.summerhackathon.domain.user.domain.User;
 import kr.hs.dgsw.summerhackathon.domain.user.domain.repository.UserRepository;
 import kr.hs.dgsw.summerhackathon.global.lib.JwtProvider;
