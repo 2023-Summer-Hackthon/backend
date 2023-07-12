@@ -1,15 +1,17 @@
 package kr.hs.dgsw.summerhackathon.domain.user.domain;
 
+import kr.hs.dgsw.summerhackathon.domain.ask.domain.Ask;
+import kr.hs.dgsw.summerhackathon.domain.question.domain.Question;
 import kr.hs.dgsw.summerhackathon.domain.user.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -30,7 +32,27 @@ public class User {
 
     private String brith;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private String nationality;
+
+    @Embedded
+    private Cash cash;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Question> questions = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Ask> asks = new HashSet<>();
+
+    public void addQuestion(Question question) {
+        question.setUser(this);
+        questions.add(question);
+    }
+
+    public void addAsk(Ask ask) {
+        ask.setUser(this);
+        asks.add(ask);
+    }
 }
