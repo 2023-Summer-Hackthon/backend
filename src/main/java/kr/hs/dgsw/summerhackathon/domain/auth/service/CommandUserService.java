@@ -14,6 +14,8 @@ public class CommandUserService {
 
     @Transactional
     public void createUser(CreateUserRequest request) {
+        System.out.println(request.getAccountId());
+        System.out.println(request.getName());
         userRepository.save(
                 request.toEntity()
         );

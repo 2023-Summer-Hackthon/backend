@@ -1,9 +1,13 @@
 package kr.hs.dgsw.summerhackathon.domain.chat.presentation;
 
 import kr.hs.dgsw.summerhackathon.domain.chat.domain.ChatMessage;
+import kr.hs.dgsw.summerhackathon.domain.chat.presentation.dto.request.ChatMessageRequest;
 import kr.hs.dgsw.summerhackathon.domain.chat.presentation.dto.response.ChatNotificationResponse;
 import kr.hs.dgsw.summerhackathon.domain.chat.service.ChatMessageService;
 import kr.hs.dgsw.summerhackathon.domain.chat.service.ChatRoomService;
+import kr.hs.dgsw.summerhackathon.domain.chat.service.ProcessMessageService;
+import kr.hs.dgsw.summerhackathon.domain.user.domain.repository.UserRepository;
+import kr.hs.dgsw.summerhackathon.global.annotation.AuthGuard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,41 +26,26 @@ public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
+    private final UserRepository userRepository;
+    private final ProcessMessageService processMessageService;
 
     @MessageMapping("/chat")
-    public void processMessage(@Payload ChatMessage chatMessage) {
-        System.out.println("here");
-        // get chatId or create chat
-        var chatId = chatRoomService
-                .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
+    @AuthGuard
+    public void processMessage(
+            /*@Payload ChatMessage chatMessage*/
+            @Payload ChatMessageRequest request,
+            @RequestAttribute Long userId
+    ) {
 
-        chatMessage.setChatId(chatId.get());
-
-        ChatMessage saved = chatMessageService.save(chatMessage);
-        messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(),
-                "/queue/messages",
-                new ChatNotificationResponse(
-                        saved.getId().toString(),
-                        saved.getSenderId(),
-                        saved.getSenderName())
-        );
+        processMessageService.sendMessage(userId, request);
     }
 
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
-    public ResponseEntity<Long> countNewMessages(
-            @PathVariable String senderId,
-            @PathVariable String recipientId) {
-
-        return ResponseEntity
-                .ok(chatMessageService.countNewMessages(senderId, recipientId));
-    }
-
-    @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable String senderId,
+    @GetMapping("/messages/{recipientId}")
+    @AuthGuard
+    public ResponseEntity<?> findChatMessages ( @RequestAttribute Long userId,
                                                 @PathVariable String recipientId) {
         return ResponseEntity
-                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+                .ok(chatMessageService.findChatMessages(userId, recipientId));
     }
 
     @GetMapping("/messages/{id}")

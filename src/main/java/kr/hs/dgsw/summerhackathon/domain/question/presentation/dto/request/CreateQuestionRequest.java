@@ -10,5 +10,5 @@ public class CreateQuestionRequest {
     private String title;
     private String content;
     private Category category;
-    private String reward;
+    private Long reward;
 }

@@ -25,7 +25,7 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private String reward;
+    private Long reward;
 
     @Setter
     @ManyToOne
@@ -38,5 +38,12 @@ public class Question {
     public void addAsk(Ask ask) {
         ask.setQuestion(this);
         asks.add(ask);
+    }
+
+    public boolean canManage(User user) {
+        if(this.getUser() == user) {
+            return true;
+        }
+        return false;
     }
 }

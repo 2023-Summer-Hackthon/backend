@@ -20,7 +20,7 @@ public class QueryQuestionListService {
 
     @Transactional(readOnly = true)
     public List<QuestionListResponse> getQuestionList(int page) {
-        Page<Question> questionPage = questionRepository.findAll(PageRequest.of(page -1, 10));
+        Page<Question> questionPage = questionRepository.findAll(PageRequest.of(page - 1, 5));
         return questionPage.stream().map(
                 it -> new QuestionListResponse(it.getId(), it.getTitle(), it.getUser().getAccountId(), it.getCategory().getValue())
         ).collect(Collectors.toList());

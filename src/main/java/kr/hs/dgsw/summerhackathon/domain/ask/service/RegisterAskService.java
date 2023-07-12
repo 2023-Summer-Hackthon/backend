@@ -1,6 +1,7 @@
 package kr.hs.dgsw.summerhackathon.domain.ask.service;
 
 import kr.hs.dgsw.summerhackathon.domain.ask.domain.Ask;
+import kr.hs.dgsw.summerhackathon.domain.ask.exception.NotFoundQuestionException;
 import kr.hs.dgsw.summerhackathon.domain.ask.presentation.dto.request.CreateAskRequest;
 import kr.hs.dgsw.summerhackathon.domain.question.domain.Question;
 import kr.hs.dgsw.summerhackathon.domain.question.domain.repository.QuestionRepository;
@@ -20,7 +21,7 @@ public class RegisterAskService {
             CreateAskRequest request
     ) {
         Question question = questionRepository.findById(request.getQuestionId())
-                .orElseThrow(() -> new RuntimeException("질문이 없노"));
+                .orElseThrow(() -> NotFoundQuestionException.EXCEPTION);
 
         Ask ask = Ask.builder()
                 .content(request.getContent())

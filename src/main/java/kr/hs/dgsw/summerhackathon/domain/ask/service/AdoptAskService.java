@@ -45,7 +45,7 @@ public class AdoptAskService {
     }
 
     private void processReward(Question question, User user, Ask ask) {
-        int reward = Integer.parseInt(question.getReward());
+        long reward = question.getReward();
         ask.getUser().getCash().add(reward);
         user.getCash().subtract(reward);
     }
