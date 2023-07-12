@@ -15,7 +15,7 @@ import java.security.Key;
 @ConfigurationProperties("jwt")
 public class JwtProperties {
     private String secretKey;
-    private String exp;
+    private long exp;
 
     public Key getSigningKey(String secretKey) {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
